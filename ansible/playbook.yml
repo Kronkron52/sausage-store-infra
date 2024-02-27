@@ -1,0 +1,15 @@
+---
+
+- name: Install backend
+  hosts: backend_servers
+  become: true
+  roles:
+    - role: backend
+
+
+- name: Install frontend
+  hosts: frontend_servers
+  become: true
+  roles:
+    - role: frontend
+ 

@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-report
+  labels:
+    app: backend-report
+spec:
+  replicas: 1
+  revisionHistoryLimit: 15 
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: backend-report
+  template:
+    metadata:
+      labels:
+        app: backend-report
+    spec:
+      containers:
+        - name: backend-report
+          image: gitlab.praktikum-services.ru:5050/std-021-009/sausage-store/sausage-backend-report:latest
+          resources:
+            requests:
+              memory: "2050Mi"
+              cpu: 2
+            limits:
+              memory: "4100Mi"
+              cpu: 4
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB
+              value: mongodb://std-021-009:Testusr1234@rc1a-8chrm00i9wra1atw.mdb.yandexcloud.net:27018/std-021-009?tls=true&tlsAllowInvalidCertificates=true
+            - name: VAULT_HOST
+              value: std-021-09.praktikum-services.tech
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vault
+                  key: vault_token
+          ports:
+            - name: backend-report
+              containerPort: 8084
+      imagePullSecrets:
+        - name: docker-config-secret
+
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: backend-report-hpa
+  labels:
+    app: backend-report-hpa
+spec:
+  minReplicas: 1
+  maxReplicas: 5
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend-report
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 75 

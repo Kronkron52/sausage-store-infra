@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-report-{{ .Release.Name }}
+  labels:
+    app: backend-report-{{ .Release.Name }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8084
+      protocol: TCP
+      targetPort: 8084
+  selector:
+    app: backend-report-{{ .Release.Name }}

@@ -1,0 +1,9 @@
+- name: read systemctl config
+  systemd:
+    daemon_reload: yes
+
+- name: restart nginx
+  service:
+    enabled: true
+    name: nginx
+    state: restarted

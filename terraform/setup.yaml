@@ -1,0 +1,19 @@
+#cloud-config
+ssh_pwauth: false
+
+users:
+- name: ansible
+  gecos: Ansible User
+  groups: users,admin,wheel
+  sudo: ALL=(ALL) NOPASSWD:ALL
+  shell: /bin/bash
+  ssh-authorized-keys:
+    - ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBODEGNvuPJHFSwgQh6Rh5h38hbh+xMF2Z28oBXL0O5fKEJzNRM6txwCdF8uMcR471HlfJ6zs6pXdI0vq3k1qXak= student@fhm8ehrah2gpr76csnsd
+
+- name: ubuntu
+  gecos: Ubuntu User
+  groups: users,admin,wheel
+  sudo: ALL=(ALL) NOPASSWD:ALL
+  shell: /bin/bash
+
+

@@ -1,0 +1,12 @@
+---
+backend_service_user         : backend
+backend_service_group        : backend
+backend_report_directory     : /var/sausage-store/reports
+backend_log_path             : /var/sausage-store/logs
+backend_working_directory    : /opt/sausage-store/backend
+NEXUS_REPO_BACKEND_NAME      : sausage-store-yurchikhin-e-backend
+VERSION                      : 1.0.819423
+
+
+
+

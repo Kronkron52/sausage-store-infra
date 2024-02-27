@@ -1,0 +1,32 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  # ArgoCD видит все установленные Helm-релизы в кластере, укажи своё имя, чтобы избежать конфликтов
+  name: sausage-store-std-021-009
+spec:
+  project: std-021-009
+  destination:
+    namespace: std-021-009
+    # Используй этот URL для работы с Kubernetes-кластером
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: 'kubernetes/sausage-store-chart/charts'
+    # Это ссылка к Helm-репозиторию с Helm-чартом
+    repoURL: 'https://nexus.praktikum-services.tech/repository/sausage-store-helm-eduard-yurchikhin-21/'
+    targetRevision: 0.3.0
+    chart: sausage-store
+    helm:
+      valuesFiles:
+      - values.yaml
+      parameters:
+      - name: "environment"
+        value: test
+
+  syncPolicy:
+    automated:
+      prune   : true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+

@@ -1,0 +1,23 @@
+# Default Values for my Helm Chart
+
+container:
+  image: gitlab.praktikum-services.ru:5050/std-021-009/sausage-store/sausage-backend-report:latest
+
+replicaCount: 1
+revisionHistoryLimit: 15
+database:
+  url: mongodb://std-021-009:Testusr1234@rc1a-8chrm00i9wra1atw.mdb.yandexcloud.net:27018/std-021-009?tls=true&tlsAllowInvalidCertificates=true
+
+vault:
+  host: std-021-09.praktikum-services.tech
+
+environment: production
+
+resources:
+  requests:
+    memory: 2050Mi
+    cpu: 2
+  limits:
+    memory: 4100Mi
+    cpu: 4
+   

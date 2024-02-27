@@ -1,0 +1,5 @@
+---
+frontend_service_user        : frontend
+frontend_working_directory   : /opt/sausage-store/frontend
+NEXUS_REPO_FRONTEND_NAME     : sausage-store-yurchikhin-e-frontend
+VERSION                      : 1.0.819422

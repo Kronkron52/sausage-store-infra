@@ -1,0 +1,16 @@
+# Default Values for my Helm Chart
+
+container:
+  image: gitlab.praktikum-services.ru:5050/std-021-009/sausage-store/sausage-backend:latest
+
+replicaCount: 3
+revisionHistoryLimit: 15
+environment: production 
+database:
+  url: jdbc:postgresql://rc1a-1b1vu0c5khd6ep2o.mdb.yandexcloud.net:6432/std-021-009
+  username: std-021-009
+  password: Testusr1234
+
+
+vault:
+  host: std-021-09.praktikum-services.tech

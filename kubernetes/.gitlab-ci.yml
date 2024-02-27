@@ -1,0 +1,25 @@
+---
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  image: alpine/k8s:1.26.12
+  environment:
+    name: k8s
+    url: https://std-021-009.k8s.praktikum-services.tech
+  #when: manual
+  before_script:
+    - mkdir -p ~/.kube
+    - chmod 700 ~/.kube
+    - echo "$kubeconfig" > ~/.kube/config
+    - chmod 644 ~/.kube/config
+  script:
+    - helm repo add nexus $NEXUS_HELM_REPO
+    - helm repo update
+    # - helm upgrade --install sausage-store nexus/sausage-store --version 0.3.0
+    # - kubectl config use-context std-021-009@yc-managed-k8s
+    # - kubectl apply -f kubernetes/backend/
+    # - kubectl apply -f kubernetes/backend-report/
+    # - kubectl apply -f kubernetes/frontend/
+    # - rm ~/.kube/config

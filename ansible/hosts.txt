@@ -1,0 +1,6 @@
+[backend_servers]
+backend ansible_host=10.128.0.60
+
+
+[frontend_servers]
+frontend ansible_host=10.128.0.60

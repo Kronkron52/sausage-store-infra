@@ -1,0 +1,55 @@
+---
+- name: Update the system and Install openjdk-16-jdk package
+  ansible.builtin.apt:
+    name: openjdk-16-jdk
+    state: present
+    update_cache: yes
+    force_apt_get: yes
+    install_recommends: yes
+
+- name: Create user backend
+  user:
+    name: backend
+    shell: /usr/sbin/nologin
+    system: yes
+    createhome: no
+
+- name: Create backend working directory
+  file:
+    path: "{{ backend_working_directory }}"
+    state: directory
+    owner: backend
+    group: backend
+    mode: "0755"
+
+- name: Downloading artifacts in the Nexus
+  get_url:
+    url: "{{ NEXUS_REPO_URL }}/{{ NEXUS_REPO_BACKEND_NAME }}/com/yandex/practicum/devops/sausage-store/{{ VERSION }}/sausage-store-{{ VERSION }}.jar"
+    dest: /opt/sausage-store/backend/sausage-store.jar
+    username: "{{ NEXUS_REPO_USER }}"
+    password: "{{ NEXUS_REPO_PASS }}"
+
+- name: Change file ownership
+  file:
+    path: /opt/sausage-store/backend/sausage-store.jar
+    owner: backend
+    group: backend
+    mode: "644"
+
+
+- name: Config templates
+  template:
+    src: sausage-store-backend.service.j2
+    dest: /etc/systemd/system/sausage-store-backend.service
+    owner: root
+    group: root
+    mode: "644"
+  notify: 
+    - Restart Sausage Store Backend
+    - Reload systemd
+
+- name: Started sausage-store-backend.service
+  service:
+    name: sausage-store-backend.service
+    state: started
+    enabled: yes

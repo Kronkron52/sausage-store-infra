@@ -1,0 +1,7 @@
+cloud_id = "b1g3jddf4nv5e9okle7p"
+folder_id = "b1g3nvv8sngeob717ei7"
+zone = "ru-central1-a"
+platform_id = "standard-v1"
+disk_size = "30"
+image_id = "fd80qm01ah03dkqb14lc"
+subnet_id = "e9b9i3jkm7hdhu9rkteg"

@@ -1,0 +1,76 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Update the system and Tools
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - zip
+    - nginx
+
+- name: Create Nginx configuration file
+  template:
+    src: sausage-store.j2
+    dest: /etc/nginx/sites-enabled/default
+
+- name: Start nginx
+  service:
+    enabled: true
+    name: nginx
+    state: started
+
+- name: Create user frontend
+  ansible.builtin.user:
+    name: frontend
+    shell: /usr/sbin/nologin
+    create_home: no
+
+- name: add nginx user to frontend group
+  user: 
+    name: www-data
+    groups: frontend
+    append: yes
+
+- name: Create frontend working directory
+  file:
+    path: "{{ frontend_working_directory }}"
+    state: directory
+    owner: frontend
+    group: frontend
+    mode: "0755"
+
+- name: Downloading artifacts in the Nexus
+  get_url:
+    url: "{{ NEXUS_REPO_URL }}/{{ NEXUS_REPO_FRONTEND_NAME }}/{{ VERSION
+      }}/sausage-store-{{ VERSION }}.tar.gz"
+    dest: /opt/sausage-store/frontend/sausage-store-frontend.tar.gz
+    username: "{{ NEXUS_REPO_USER }}"
+    password: "{{ NEXUS_REPO_PASS }}"
+
+- name: Create destination directory
+  file:
+    path: /opt/sausage-store/frontend/dist/
+    state: directory
+    owner: frontend
+    group: frontend
+    mode: "0755"
+
+- name: Extract frontend files
+  unarchive:
+    src: /opt/sausage-store/frontend/sausage-store-frontend.tar.gz
+    dest: /opt/sausage-store/frontend/dist/
+    remote_src: yes
+    owner: frontend
+    group: frontend
+    mode: "0755"
+
+- name: Remove frontend tar file
+  file:
+    path: /opt/sausage-store/frontend/sausage-store-frontend.tar.gz
+    state: absent
+  notify: 
+    - read systemctl config
+    - restart nginx

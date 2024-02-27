@@ -1,0 +1,9 @@
+backend:
+  environment: test
+  replicaCount: 1
+
+backend-report:
+  environment: test
+
+frontend:
+  environment: test
